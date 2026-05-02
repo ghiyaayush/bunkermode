@@ -13,7 +13,9 @@
     "mcp": "bun mcp/server.ts",
     "telegram": "bun telegram/bot.ts",
     "audit:run": "bun scripts/run-audit.ts",
-    "demo:reset": "bun scripts/reset-demo.ts"
+    "demo:reset": "bun scripts/reset-demo.ts",
+    "bot": "tsx scripts/dev-bot.ts",
+    "set-webhook": "tsx scripts/set-webhook.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.17.3",
@@ -30,7 +32,10 @@
     "recharts": "^2.15.0",
     "viem": "^2.21.55",
     "wagmi": "^3.6.9",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "@supabase/supabase-js": "^2.46.0",
+    "d3": "^7.9.0",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.12",
@@ -41,6 +46,8 @@
     "postcss": "^8.5.1",
     "prisma": "^7.4.0",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "@types/d3": "^7.4.3",
+    "tsx": "^4.19.0"
   }
 }
