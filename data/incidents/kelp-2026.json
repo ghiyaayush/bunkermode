@@ -1,0 +1,27 @@
+{
+  "incident": "KelpDAO LayerZero bridge exploit",
+  "date": "2026-04-18",
+  "directLossUsd": 292000000,
+  "cascadeOutflowsUsd": 13210000000,
+  "aaveBadDebtUsd": 196000000,
+  "attribution": "Lazarus Group (DPRK)",
+  "attackClass": "bridge_verifier",
+  "drainTimeMinutes": 46,
+  "timeline": [
+    { "t": 0, "label": "Bridge drained 116,500 rsETH ($292M)" },
+    { "t": 60, "label": "rsETH depeg begins on Layer 2s" },
+    { "t": 360, "label": "Aave WETH market utilization climbs past 85%" },
+    { "t": 5040, "label": "Aave WETH market hits 100% utilization. All withdrawals locked." },
+    { "t": 8400, "label": "rsETH market officially frozen by Protocol Guardian" },
+    { "t": 25200, "label": "Aave WETH lockout reached 7 hours before official freeze" },
+    { "t": 43200, "label": "$175M of stolen funds bridged to Bitcoin via cross-chain laundering" }
+  ],
+  "lessons": [
+    "Single DVN verifier (1-of-1) was the structural failure",
+    "Utilization climbed to 100% 7 hours before the official market freeze",
+    "Shared pools (Aave) lost 45.8% TVL; isolated pools (Morpho) lost 9.3%",
+    "SparkLend gained $790M because it had exited rsETH 3 months earlier",
+    "Users who exited to Curve 3pool took secondary slippage losses",
+    "Users who exited to USDT got brief depeg from supply pressure"
+  ]
+}

@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// A user (wallet) of BunkerMode
+model Wallet {
+  id        String   @id @default(cuid())
+  address   String   @unique
+  telegram  String?  // chat_id, anonymous
+  createdAt DateTime @default(now())
+
+  policies  Policy[]
+  events    Event[]
+  audits    Audit[]
+}
+
+// A bunker policy: rules for what to do when threats are detected
+model Policy {
+  id           String   @id @default(cuid())
+  walletId     String
+  wallet       Wallet   @relation(fields: [walletId], references: [id])
+  name         String
+  templateKey  String   // e.g. "aave-rseth-cascade"
+  dsl          String   // JSON serialized BunkerPolicy DSL
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  events       Event[]
+}
+
+// A signal received from a feed (Forta, Hypernative, Twitter, Utilization, etc.)
+model Signal {
+  id          String   @id @default(cuid())
+  source      String   // forta | hypernative | twitter | utilization | governance | supply_chain
+  protocol    String   // e.g. "aave-v3"
+  asset       String?  // e.g. "rsETH"
+  layer       Int      // 1-5 from signal hierarchy (P5)
+  severity    String   // INFO | WATCH | ELEVATED | CRITICAL
+  rawPayload  String   // JSON
+  receivedAt  DateTime @default(now())
+
+  links       SignalLink[]
+}
+
+// An event represents a tier-state change for a wallet/policy
+model Event {
+  id          String   @id @default(cuid())
+  walletId    String
+  wallet      Wallet   @relation(fields: [walletId], references: [id])
+  policyId    String?
+  policy      Policy?  @relation(fields: [policyId], references: [id])
+  links       SignalLink[]
+  tier        String   // T1 | T2 | T3 | REFUSED
+  attackClass String?  // P9 classification
+  recoveryRate Float?  // P9 recovery rate
+  t2Window    Int?     // P9 T2 window in seconds
+  exitRoute   String?  // P7 chosen destination
+  outcome     String?  // executed | refused | aborted | reversed
+  notes       String?
+  firedAt     DateTime @default(now())
+}
+
+// Many-to-many between Event and Signal (corroboration)
+model SignalLink {
+  id       String @id @default(cuid())
+  eventId  String
+  event    Event  @relation(fields: [eventId], references: [id])
+  signalId String
+  signal   Signal @relation(fields: [signalId], references: [id])
+}
+
+// P11: Monthly governance audit results per protocol per wallet
+model Audit {
+  id           String   @id @default(cuid())
+  walletId     String
+  wallet       Wallet   @relation(fields: [walletId], references: [id])
+  protocol     String
+  timelock     Int      // hours, 0 = no timelock
+  multisigM    Int      // M of N
+  multisigN    Int
+  oracleType   String   // chainlink | pyth | internal | admin
+  driftScore   Int      // 0-3 yes answers from Drift Three-Question Screen
+  riskLevel    String   // LOW | ELEVATED | HIGH | CRITICAL
+  generatedAt  DateTime @default(now())
+}
+
+// Threat environment state (P8): tightens after major hacks
+model ThreatEnvironment {
+  id              String   @id @default(cuid())
+  level           String   // NORMAL | ELEVATED | CRITICAL
+  reason          String
+  thresholdMult   Float    // 1.0 normal, 0.65 elevated (-35%), 0.5 critical (-50%)
+  windowMult      Float    // T2 window multiplier
+  expiresAt       DateTime
+  createdAt       DateTime @default(now())
+}

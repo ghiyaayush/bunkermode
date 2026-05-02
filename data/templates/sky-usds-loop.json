@@ -1,0 +1,15 @@
+{
+  "name": "Sky USDS Leveraged Loop Defender",
+  "templateKey": "sky-usds-loop",
+  "asset": "sUSDS",
+  "protocol": "sky",
+  "position": "leveraged_loop",
+  "rules": {
+    "utilizationLockoutPct": 80,
+    "autoFireOn": ["bridge_verifier", "dprk_attributed", "access_control"],
+    "exitRoute": ["usdc-base-cctp", "morpho-isolated", "native-eth"],
+    "reEntryGate": true,
+    "refuseOnSupplyChain": true,
+    "hardwareWalletAbove": 50000
+  }
+}

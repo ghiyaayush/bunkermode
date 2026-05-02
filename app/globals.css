@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: #0A0E13;
+  color: #E5E9F0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tier color tokens */
+.tier-watch { color: #3B82F6; }
+.tier-elevated { color: #F59E0B; }
+.tier-critical { color: #DC2626; }
+.tier-refused { color: #7A8392; }
+
+/* Subtle scanlines on the demo console */
+.scanlines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.02) 0px,
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* Pulse for live signals */
+@keyframes bunker-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+.live-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981;
+  animation: bunker-pulse 1.6s ease-in-out infinite;
+  margin-right: 8px;
+}

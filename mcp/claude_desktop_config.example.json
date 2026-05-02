@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "bunkermode": {
+      "command": "bun",
+      "args": ["/Users/ayushghiya/bunkermode/mcp/server.ts"],
+      "env": {
+        "BUNKER_API_BASE": "http://localhost:3000"
+      }
+    }
+  }
+}

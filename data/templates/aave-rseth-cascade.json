@@ -1,0 +1,15 @@
+{
+  "name": "Aave rsETH Cascade Defender",
+  "templateKey": "aave-rseth-cascade",
+  "asset": "rsETH",
+  "protocol": "aave-v3",
+  "position": "shared_pool_supplier",
+  "rules": {
+    "utilizationLockoutPct": 85,
+    "autoFireOn": ["bridge_verifier", "dprk_attributed"],
+    "exitRoute": ["usdc-base-cctp", "morpho-isolated", "sparklend", "native-eth"],
+    "reEntryGate": true,
+    "refuseOnSupplyChain": true,
+    "hardwareWalletAbove": 50000
+  }
+}

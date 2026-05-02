@@ -1,0 +1,15 @@
+{
+  "name": "Drift Governance Profile Watch",
+  "templateKey": "drift-governance",
+  "asset": "USDC",
+  "protocol": "drift-v2",
+  "position": "shared_pool_supplier",
+  "rules": {
+    "utilizationLockoutPct": 80,
+    "autoFireOn": ["dprk_attributed", "spoof_token", "access_control"],
+    "exitRoute": ["usdc-base-cctp", "native-eth"],
+    "reEntryGate": true,
+    "refuseOnSupplyChain": true,
+    "hardwareWalletAbove": 25000
+  }
+}

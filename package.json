@@ -1,0 +1,46 @@
+{
+  "name": "bunkermode",
+  "version": "0.2.0",
+  "private": true,
+  "description": "User-level crisis response layer for DeFi. v2 framework: 11 principles, 3 modules.",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "prisma db push --url=file:./prisma/dev.db",
+    "db:seed": "bun scripts/seed-demo.ts",
+    "mcp": "bun mcp/server.ts",
+    "telegram": "bun telegram/bot.ts",
+    "audit:run": "bun scripts/run-audit.ts",
+    "demo:reset": "bun scripts/reset-demo.ts"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.17.3",
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "@prisma/adapter-better-sqlite3": "^7.4.0",
+    "@prisma/adapter-libsql": "^7.8.0",
+    "@prisma/client": "^7.4.0",
+    "@tanstack/react-query": "^5.100.8",
+    "better-sqlite3": "^11.8.0",
+    "grammy": "^1.36.0",
+    "next": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.15.0",
+    "viem": "^2.21.55",
+    "wagmi": "^3.6.9",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.1",
+    "prisma": "^7.4.0",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3"
+  }
+}
