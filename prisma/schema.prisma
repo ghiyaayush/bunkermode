@@ -91,6 +91,18 @@ model Audit {
   generatedAt  DateTime @default(now())
 }
 
+// Webhook alert dedup: collapse duplicate provider alerts within a window
+// so users don't get spammed for one incident hitting multiple bots.
+model AlertDedup {
+  key       String   @id  // sha256(provider + alertId + walletId + addr)
+  provider  String   // forta | hypernative | cyvers
+  walletId  String?
+  firstSeen DateTime @default(now())
+  lastSeen  DateTime @default(now())
+  count     Int      @default(1)
+  expiresAt DateTime // first-seen + DEDUP_WINDOW
+}
+
 // Threat environment state (P8): tightens after major hacks
 model ThreatEnvironment {
   id              String   @id @default(cuid())

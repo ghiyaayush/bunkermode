@@ -29,3 +29,10 @@ npm-debug.log*
 
 # local
 .cache/
+.vercel
+
+# rendered video output (kept locally only)
+video/assets/out/
+
+# typescript build artifact
+tsconfig.tsbuildinfo
