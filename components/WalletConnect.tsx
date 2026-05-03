@@ -61,7 +61,7 @@ export function WalletConnect({ value, onChange }: Props) {
 
   return (
     <div className="space-y-2">
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2">
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -71,7 +71,7 @@ export function WalletConnect({ value, onChange }: Props) {
         <button
           onClick={connect}
           disabled={connecting}
-          className="bg-bunker-bg border border-bunker-accent text-bunker-accent px-4 py-3 rounded font-mono text-sm disabled:opacity-50 whitespace-nowrap"
+          className="w-full bg-bunker-bg border border-bunker-accent text-bunker-accent px-4 py-2 rounded font-mono text-sm disabled:opacity-50"
         >
           {connecting ? "Connecting..." : "Connect Wallet"}
         </button>

@@ -252,7 +252,7 @@ export default function SetupPage() {
     <div style={{ display: "flex", height: "100%", background: "#030712", color: "white", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", overflow: "hidden" }}>
 
       {/* ── Left sidebar ─────────────────────────────────────────────── */}
-      <div style={{ width: 360, borderRight: "1px solid #1f2937", display: "flex", flexDirection: "column", overflowY: "auto", flexShrink: 0 }}>
+      <div style={{ width: 360, borderRight: "1px solid #1f2937", display: "flex", flexDirection: "column", overflowY: "auto", overflowX: "hidden", flexShrink: 0 }}>
 
         {/* Header */}
         <div style={{ padding: "24px 24px 0" }}>
