@@ -9,7 +9,13 @@ import {
   type ProtocolTokenContract,
 } from "./known-contracts";
 
-const ETH_RPC = "https://eth.llamarpc.com";
+// Multiple public RPCs — tried in order, first successful response wins
+const ETH_RPCS = [
+  "https://cloudflare-eth.com",
+  "https://ethereum.publicnode.com",
+  "https://rpc.ankr.com/eth",
+  "https://eth.llamarpc.com",
+];
 const SOL_RPC = "https://api.mainnet-beta.solana.com";
 const CALL_TIMEOUT_MS = 8000;
 
@@ -30,23 +36,33 @@ function encodeBalanceOf(holder: string): string {
   return "0x" + selector + param;
 }
 
-async function ethCall(to: string, data: string): Promise<string | null> {
+async function rpcPost(rpc: string, body: object): Promise<unknown | null> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), CALL_TIMEOUT_MS);
   try {
-    const res = await fetch(ETH_RPC, {
+    const res = await fetch(rpc, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to, data }, "latest"] }),
+      body: JSON.stringify(body),
       signal: controller.signal,
     });
-    const json = await res.json();
+    if (!res.ok) return null;
+    const json = await res.json() as { result?: unknown; error?: unknown };
+    if (json.error) return null;
     return json.result ?? null;
   } catch {
     return null;
   } finally {
     clearTimeout(timer);
   }
+}
+
+async function ethCall(to: string, data: string): Promise<string | null> {
+  for (const rpc of ETH_RPCS) {
+    const result = await rpcPost(rpc, { jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to, data }, "latest"] });
+    if (result !== null) return result as string;
+  }
+  return null;
 }
 
 async function batchBalanceOf(
@@ -57,9 +73,11 @@ async function batchBalanceOf(
   // Batch in groups of 10 to avoid rate limiting
   const results = new Map<string, bigint>();
   const chunks: (TokenContract | ProtocolTokenContract)[][] = [];
-  for (let i = 0; i < contracts.length; i += 10) chunks.push(contracts.slice(i, i + 10));
+  for (let i = 0; i < contracts.length; i += 6) chunks.push(contracts.slice(i, i + 6));
 
-  for (const chunk of chunks) {
+  for (let ci = 0; ci < chunks.length; ci++) {
+    const chunk = chunks[ci];
+    if (ci > 0) await new Promise((r) => setTimeout(r, 120)); // avoid rate limit
     const calls = chunk.map((c) => ethCall(c.contract, data));
     const raw = await Promise.all(calls);
     raw.forEach((hex, i) => {
@@ -74,14 +92,34 @@ async function batchBalanceOf(
   return results;
 }
 
+// ─── Native ETH balance ───────────────────────────────────────────────────────
+
+async function fetchNativeEth(address: string): Promise<bigint> {
+  for (const rpc of ETH_RPCS) {
+    const result = await rpcPost(rpc, { jsonrpc: "2.0", id: 1, method: "eth_getBalance", params: [address, "latest"] });
+    if (result !== null) {
+      try { return BigInt(result as string); } catch { continue; }
+    }
+  }
+  return 0n;
+}
+
 export async function fetchEthereumPositions(address: string): Promise<DetectedPosition[]> {
-  const [tokenBals, protocolBals] = await Promise.all([
+  const [tokenBals, protocolBals, nativeEth] = await Promise.all([
     batchBalanceOf(ETH_TOKEN_CONTRACTS, address),
     batchBalanceOf(PROTOCOL_RECEIPT_CONTRACTS, address),
+    fetchNativeEth(address),
   ]);
 
   const positions: DetectedPosition[] = [];
   const seenNodeIds = new Set<string>();
+
+  // Native ETH
+  const ethHuman = Number(nativeEth) / 1e18;
+  if (ethHuman >= 0.0001) {
+    positions.push({ nodeId: "eth", name: "ETH", balance: ethHuman, rawBalance: nativeEth.toString(), isProtocol: false });
+    seenNodeIds.add("eth");
+  }
 
   // Token holdings
   for (const t of ETH_TOKEN_CONTRACTS) {
