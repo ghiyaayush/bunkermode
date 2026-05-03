@@ -17,7 +17,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </a>
             <nav className="flex gap-5 text-sm font-mono text-bunker-muted">
               <a href="/setup" className="hover:text-bunker-text">Setup</a>
+              <a href="/contagion-map" className="hover:text-bunker-text">Map</a>
               <a href="/monitor" className="hover:text-bunker-text">Monitor</a>
+              <a href="/alerts" className="hover:text-bunker-text">Alerts</a>
               <a href="/demo" className="hover:text-bunker-text">Demo</a>
               <a href="/governance-audit" className="hover:text-bunker-text">P11 Audit</a>
               <a href="/re-entry" className="hover:text-bunker-text">Re-entry</a>
