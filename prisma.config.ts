@@ -7,6 +7,7 @@ export default defineConfig({
     path: path.join(__dirname, "prisma", "migrations"),
   },
   datasource: {
-    url: "file:./prisma/dev.db",
+    // Direct port 5432 for migrations/DDL (pgbouncer pooled port 6543 doesn't support DDL)
+    url: process.env.DIRECT_URL ?? process.env.DATABASE_URL ?? "",
   },
 });
