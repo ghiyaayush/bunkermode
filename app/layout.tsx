@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Logo } from "@/components/Logo";
 
 export const metadata: Metadata = {
   title: "BunkerMode",
@@ -13,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="min-h-screen bg-bunker-bg text-bunker-text">
           <header className="border-b border-bunker-border px-6 py-3 flex items-center justify-between">
             <a href="/" className="block">
-              <img src="/logo.jpg" alt="BunkerMode" className="h-12 w-auto" />
+              <Logo variant="header" />
             </a>
             <nav className="flex gap-5 text-sm font-mono text-bunker-muted">
               <a href="/setup" className="hover:text-bunker-text">Setup</a>
