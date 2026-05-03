@@ -11,9 +11,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <div className="min-h-screen bg-bunker-bg text-bunker-text">
-          <header className="border-b border-bunker-border px-6 py-4 flex items-center justify-between">
-            <a href="/" className="font-mono text-bunker-accent text-lg">
-              BUNKER<span className="text-bunker-text">MODE</span>
+          <header className="border-b border-bunker-border px-6 py-3 flex items-center justify-between">
+            <a href="/" className="block">
+              <img src="/logo.jpg" alt="BunkerMode" className="h-12 w-auto" />
             </a>
             <nav className="flex gap-5 text-sm font-mono text-bunker-muted">
               <a href="/setup" className="hover:text-bunker-text">Setup</a>
