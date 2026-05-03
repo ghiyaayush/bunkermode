@@ -47,9 +47,11 @@ interface Props {
   chain: Chain | "unknown";
   positions: DetectedPosition[];
   error?: string;
+  /** When true: fills parent container height, hides back button. For embedding in setup page. */
+  embedded?: boolean;
 }
 
-export default function PersonalizedMap({ address, chain, positions, error }: Props) {
+export default function PersonalizedMap({ address, chain, positions, error, embedded }: Props) {
   const router = useRouter();
   const svgRef = useRef<SVGSVGElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -227,14 +229,16 @@ export default function PersonalizedMap({ address, chain, positions, error }: Pr
   const shortAddr = `${address.slice(0, 6)}…${address.slice(-4)}`;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100dvh", background: "#030712", color: "white", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", background: "#030712", color: "white", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
 
       {/* Header */}
       <div style={{ borderBottom: "1px solid #1f2937", padding: "10px 16px", display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
-        <button onClick={() => router.push("/")}
-          style={{ background: "none", border: "none", color: "#6b7280", cursor: "pointer", fontSize: 18, lineHeight: 1, padding: "0 4px" }}>
-          ←
-        </button>
+        {!embedded && (
+          <button onClick={() => router.push("/")}
+            style={{ background: "none", border: "none", color: "#6b7280", cursor: "pointer", fontSize: 18, lineHeight: 1, padding: "0 4px" }}>
+            ←
+          </button>
+        )}
         <div style={{ flex: 1 }}>
           <span style={{ fontSize: 13, color: "#6b7280" }}>
             <span style={{ color: CHAIN_COLORS[chain === "unknown" ? "ethereum" : chain], fontWeight: 600, marginRight: 6, textTransform: "capitalize" }}>{chain}</span>

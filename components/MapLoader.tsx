@@ -29,7 +29,7 @@ export default function MapLoader({ address, chain }: Props) {
 
   if (positions === null) {
     return (
-      <div style={{ height: "100dvh", background: "#030712", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
+      <div style={{ height: "100%", background: "#030712", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
         <div style={{ width: 36, height: 36, border: "3px solid #1f2937", borderTopColor: "#3b82f6", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
         <p style={{ color: "#6b7280", fontSize: 14 }}>Scanning wallet positions…</p>
         <p style={{ color: "#374151", fontSize: 12, fontFamily: "monospace" }}>{address.slice(0, 8)}…{address.slice(-6)}</p>

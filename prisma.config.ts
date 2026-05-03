@@ -1,12 +1,12 @@
-import path from "node:path";
 import { defineConfig } from "prisma/config";
+import { config } from "dotenv";
+
+// Prisma only auto-loads .env, not .env.local — load it manually
+config({ path: ".env.local" });
 
 export default defineConfig({
-  schema: path.join(__dirname, "prisma", "schema.prisma"),
-  migrations: {
-    path: path.join(__dirname, "prisma", "migrations"),
-  },
   datasource: {
-    url: "file:./prisma/dev.db",
+    url: process.env.DATABASE_URL!,
+    directUrl: process.env.DIRECT_URL,
   },
 });

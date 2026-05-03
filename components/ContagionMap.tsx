@@ -135,7 +135,7 @@ export default function ContagionMap() {
   }, [selected, affected]);
 
   return (
-    <div className="flex flex-col" style={{height:"100dvh",background:"#030712",color:"white"}}>
+    <div className="flex flex-col" style={{height:"100%",background:"#030712",color:"white"}}>
       {/* Header */}
       <div style={{borderBottom:"1px solid #1f2937",padding:"12px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",flexShrink:0}}>
         <div>

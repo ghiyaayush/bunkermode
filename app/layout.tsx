@@ -10,7 +10,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <div className="min-h-screen bg-bunker-bg text-bunker-text">
+        <div className="bg-bunker-bg text-bunker-text" style={{ display: "flex", flexDirection: "column", height: "100dvh" }}>
           <header className="border-b border-bunker-border px-6 py-4 flex items-center justify-between">
             <a href="/" className="font-mono text-bunker-accent text-lg">
               BUNKER<span className="text-bunker-text">MODE</span>
@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <span className="live-dot"></span>v0.2 (v2 framework)
             </div>
           </header>
-          <main>{children}</main>
+          <main style={{ flex: 1, overflow: "hidden", minHeight: 0 }}>{children}</main>
         </div>
       </body>
     </html>

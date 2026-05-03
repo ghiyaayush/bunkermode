@@ -49,3 +49,7 @@ body {
   animation: bunker-pulse 1.6s ease-in-out infinite;
   margin-right: 8px;
 }
+
+html, body {
+  height: 100%;
+}
