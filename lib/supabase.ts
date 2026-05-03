@@ -47,7 +47,19 @@ function getClient(): AnyClient {
   return createClient(url, key, { auth: { persistSession: false } });
 }
 
-export const db: AnyClient = getClient();
+// Lazy client so importing this module doesn't crash routes that don't use it.
+// Call sites still see `db.from(...)` — the proxy resolves on first access.
+let _client: AnyClient | null = null;
+export const db: AnyClient = new Proxy({} as AnyClient, {
+  get(_target, prop, receiver) {
+    if (!_client) _client = getClient();
+    return Reflect.get(_client, prop, receiver);
+  },
+});
+
+export function isSupabaseConfigured(): boolean {
+  return !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY);
+}
 
 // ─── Wallet helpers ───────────────────────────────────────────────────────────
 
