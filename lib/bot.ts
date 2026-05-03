@@ -7,6 +7,7 @@ import {
   upsertPositions, getPositionsForWallet, deactivateWallet,
   type Wallet,
 } from "./supabase";
+import { nodeLabel } from "./forta-address-mapper";
 
 // ─── Formatting helpers ───────────────────────────────────────────────────────
 
@@ -258,6 +259,47 @@ export function createBot(): Bot {
     } catch {
       await ctx.editMessageText("❌ Failed to remove wallet\\.", { parse_mode: "MarkdownV2" });
     }
+  });
+
+  // ── Forta alert action handlers ──────────────────────────────────────────────
+  // pause:<nodeId>    -> acknowledge plan to pause exposure to that node
+  // snooze:<alertId>  -> mute follow-ups for 30 minutes (stub; dedup table covers it)
+  // details:<alertId> -> echo a brief context blurb about the alert
+
+  bot.callbackQuery(/^pause:(.+)$/, async (ctx) => {
+    await ctx.answerCallbackQuery({ text: "Pause queued" });
+    const nodeId = ctx.match[1];
+    const label = nodeLabel(nodeId);
+    await ctx.reply(
+      [
+        `🛑 *Pause queued for ${escMd(label)}*`,
+        "",
+        "Bunker T2 confirmation needed before any on\\-chain action\\.",
+        "Open the app → Threat panel to confirm exit route\\.",
+      ].join("\n"),
+      { parse_mode: "MarkdownV2" }
+    );
+  });
+
+  bot.callbackQuery(/^snooze:(.+)$/, async (ctx) => {
+    await ctx.answerCallbackQuery({ text: "Snoozed 30m" });
+    await ctx.reply(
+      "💤 Follow\\-ups for this alert are snoozed for 30 minutes\\.",
+      { parse_mode: "MarkdownV2" }
+    );
+  });
+
+  bot.callbackQuery(/^details:(.+)$/, async (ctx) => {
+    await ctx.answerCallbackQuery();
+    await ctx.reply(
+      [
+        "*Why you got this alert:*",
+        "Your registered wallet has positions linked \\(directly or via contagion\\) to a protocol/token where Forta detected a high\\-severity event\\.",
+        "",
+        "Use /positions to see your full exposure map\\.",
+      ].join("\n"),
+      { parse_mode: "MarkdownV2" }
+    );
   });
 
   // Catch-all for unknown messages
